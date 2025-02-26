@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import GenderCheckbox from "./GenderCheckbox";
 import { Link } from "react-router-dom";
-import useSignUp from "../../hooks/useSignUp";
+import useSignUp from "../../hooks/useSignup";
 
 const SignUp = () => {
   // show password state
