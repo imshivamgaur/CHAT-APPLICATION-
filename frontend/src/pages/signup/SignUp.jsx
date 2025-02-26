@@ -1,15 +1,39 @@
 import React, { useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import GenderCheckbox from "./GenderCheckbox";
+import { Link } from "react-router-dom";
+import useSignUp from "../../hooks/useSignUp";
 
 const SignUp = () => {
+  // show password state
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+
+  // singup state
+  const [inputs, setInputs] = useState({
+    fullName: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+    gender: "",
+  });
+
+  const { loading, signup } = useSignUp();
+
+  const handleCheckboxChange = (gender) => {
+    setInputs({ ...inputs, gender });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // console.log(inputs);
+    await signup(inputs);
+  };
 
   return (
     <div className="box">
       <div className="glassmorphism">
-        <form className="flex flex-col">
+        <form className="flex flex-col" onSubmit={handleSubmit}>
           <h1 className="text-center mb-10 text-4xl ">
             Signup{" "}
             <span className="text-green-500 font-semibold">LetsChat</span>
@@ -24,6 +48,10 @@ const SignUp = () => {
                 type="text"
                 placeholder="John Doe"
                 className="textInput animate"
+                value={inputs.fullName}
+                onChange={(e) =>
+                  setInputs({ ...inputs, fullName: e.target.value })
+                }
               />
             </div>
 
@@ -35,6 +63,13 @@ const SignUp = () => {
                 type="text"
                 placeholder="johndoe"
                 className="textInput animate"
+                value={inputs.username}
+                onChange={(e) =>
+                  setInputs({
+                    ...inputs,
+                    username: e.target.value,
+                  })
+                }
               />
             </div>
 
@@ -45,6 +80,13 @@ const SignUp = () => {
               <input
                 type={show ? "text" : "password"}
                 className="passwordInput animate"
+                value={inputs.password}
+                onChange={(e) =>
+                  setInputs({
+                    ...inputs,
+                    password: e.target.value,
+                  })
+                }
               />
               <button
                 type="button"
@@ -63,6 +105,13 @@ const SignUp = () => {
                 placeholder=""
                 type={showConfirm ? "text" : "password"}
                 className="passwordInput animate"
+                value={inputs.confirmPassword}
+                onChange={(e) =>
+                  setInputs({
+                    ...inputs,
+                    confirmPassword: e.target.value,
+                  })
+                }
               />
               <button
                 type="button"
@@ -74,16 +123,25 @@ const SignUp = () => {
             </div>
 
             {/* GENDER CHECKBOX */}
-            <GenderCheckbox />
+            <GenderCheckbox
+              onCheckboxChange={handleCheckboxChange}
+              selectedGender={inputs.gender}
+            />
 
             <div>
-              <a href="" className=" formLink animate">
+              <Link to={"/login"} className=" formLink animate">
                 Already have an account?
-              </a>
+              </Link>
             </div>
 
             <div>
-              <button className="formButton animate">Submit</button>
+              <button className="formButton animate " disabled={loading}>
+                {loading ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Sign up"
+                )}
+              </button>
             </div>
           </div>
         </form>
